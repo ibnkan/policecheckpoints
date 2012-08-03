@@ -1,4 +1,4 @@
-//global variables
+﻿//global variables
 var map;
 var Bahrain = new google.maps.LatLng(26.05, 50.55);
 var markerIcon = "http://uploadpic.net/HYC1.png";
