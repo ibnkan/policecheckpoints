@@ -1,7 +1,7 @@
 //global variables
 var map;
-var Bahrain = new google.maps.LatLng(26.05, 50.55);
-var markerIcon = "http://uploadpic.net/HYC1.png";
+var Bahrain = new google.maps.LatLng(26.125, 50.55);
+var markerIcon = "CheckPoint.png";
 var mapmarkers = [];
 
 //create an infoWindow object to be used by markers on the map
@@ -12,7 +12,7 @@ var infoWindow = new google.maps.InfoWindow({
 function initialize() {
 
     var mapOptions = {
-        zoom: 10,
+        zoom: 11,
         center: Bahrain,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
