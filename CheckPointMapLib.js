@@ -7,40 +7,53 @@ var mapmarkers = [];
 //create an infoWindow object to be used by markers on the map
 var infoWindow = new google.maps.InfoWindow({
     maxWidth: 240
-    });
+});
 
 function initialize() {
-
+    
+    //map options 
     var mapOptions = {
         zoom: 11,
         center: Bahrain,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
+    //create map
     map = new google.maps.Map(document.getElementById("the_map"), mapOptions);
-
-//close infoWindow when map is clicked
-google.maps.event.addListener(map, 'click', function() {
-    infoWindow.close();
-});
-$(document).ready(function() {
-    $(document).bind('ProcessTweets', ProcessTweets);
-    $(document).bind('ProcessLinks', ProcessLinks);
-    $(document).bind('LongUrlReceived', LongUrlReceived);
-    $(document).bind('ShowResults', ShowResults);
-
-    $.getJSON("http://search.twitter.com/search.json?q=%23Bahrain%20%22%D9%86%D9%82%D8%B7%D8%A9%20%D8%AA%D9%81%D8%AA%D9%8A%D8%B4%22%20-filter%3Aretweets&rpp=100&result_type=recent&callback=?", function(data) {
-
-        window.response = data;
-
-        window.twitterdata = [];
-        window.linkindex = 0;
-
-        $(document).trigger('ProcessTweets');
-
-
+    
+    /*overlay infobox image on map
+    var imageBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(26.112, 50.456),
+        new google.maps.LatLng(26.049, 50.390));
+        
+            
+    var infobox = new google.maps.GroundOverlay("infobox.png", imageBounds);
+    infobox.setMap(map);*/
+    
+    //close infoWindow when map is clicked
+    google.maps.event.addListener(map, 'click', function() {
+        infoWindow.close();
+        
     });
-});
+    
+    $(document).ready(function() {
+        $(document).bind('ProcessTweets', ProcessTweets);
+        $(document).bind('ProcessLinks', ProcessLinks);
+        $(document).bind('LongUrlReceived', LongUrlReceived);
+        $(document).bind('ShowResults', ShowResults);
+        
+        $.getJSON("http://search.twitter.com/search.json?q=%23Bahrain%20%22%D9%86%D9%82%D8%B7%D8%A9%20%D8%AA%D9%81%D8%AA%D9%8A%D8%B4%22%20-filter%3Aretweets&rpp=100&result_type=recent&callback=?", function(data) {
+
+            window.response = data;
+
+            window.twitterdata = [];
+            window.linkindex = 0;
+
+            $(document).trigger('ProcessTweets');
+        
+        
+        });
+    });
 }
 
 //////////////////////////////////////////////////////////////////////
