@@ -119,7 +119,7 @@ function ProcessTweets(evt) {
 
     for (i = 0; i < response.results.length; i++) {
 
-        var tweet = response.results[i].text;
+        var tweet = response.results[i].text.replace(/(\b(http|https):\/\/\S+)/g, '<a href="$&">$&</a>');
         //var tweeturl = extractURL(tweet);
         var profilename = '@' + response.results[i].from_user;
         var profileimage = response.results[i].profile_image_url;
