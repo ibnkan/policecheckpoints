@@ -102,7 +102,7 @@ function extractLatLng(text) {
 
 function PrintTweet(tweet) {
 
-    var htmltext = '<div style="background-color:GhostWhite"><img src="' + tweet[0] + '\" style="float:left; margin-bottom:20px; margin-right:10px;" /img><strong>' + tweet[1] + '</strong><br /><em style="font-size:75%;">' + tweet[2] + '</em><br /><span style="font-size:55%;">posted @ ' + tweet[3] + '</span></div>';
+    var htmltext = '<div style="background-color:GhostWhite"><img src="' + tweet[0] + '\" style="float:left; margin-bottom:20px; margin-right:10px;" /img><strong>' + tweet[1] + '</strong><br /><em style="font-size:75%;">' + tweet[2].replace(/(@|#)\w+/g, "") + '</em><br /><span style="font-size:55%;">posted @ ' + tweet[3] + '</span></div>';
 
     //document.getElementById("txt").innerHTML += htmltext;
 
