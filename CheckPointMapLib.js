@@ -28,7 +28,7 @@ function initialize() {
         
             
     var infobox = new google.maps.GroundOverlay("infobox.png", imageBounds);
-    infobox.setMap(map);*/
+    infobox.setMap(map); not working so commented out */
     
     //close infoWindow when map is clicked
     google.maps.event.addListener(map, 'click', function() {
