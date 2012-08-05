@@ -13,13 +13,20 @@ function initialize() {
     
     //map options 
     var mapOptions = {
-        zoom: 10,
+        zoom: 11,
         center: Bahrain,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
     //create map
     map = new google.maps.Map(document.getElementById("the_map"), mapOptions);
+    
+    //set zoom to 10 if on mobile
+    var useragent = navigator.userAgent;
+
+    if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+        map.setZoom(9);
+    }
     
     /*overlay infobox image on map
     var imageBounds = new google.maps.LatLngBounds(
@@ -55,7 +62,14 @@ function initialize() {
         });
     });
 }
+//////////////////////////////////////////////////////////////////////
 
+function hideInfo() {
+    
+    //hide the infodiv box when clicked
+    document.getElementById("infodiv").style.display = "none";
+    
+}
 //////////////////////////////////////////////////////////////////////
 function randomDecimal() {
     var y = Math.random() - Math.random();
