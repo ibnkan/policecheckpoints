@@ -1,0 +1,42 @@
+﻿<html>    
+
+    <head>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="LocationCoordinates.js"></script>
+        <script type="text/javascript" src="CheckPointMapLib.js"></script>
+
+        <title>Police Check Points - Bahrain</title>
+        <link rel="shortcut icon" href="favicon.ico" />
+
+        <base target="main">
+
+        <style type="text/css">
+            body {
+                margin: 1px;
+                padding: 1px;
+                background-color: #deeaf6;
+            }
+        </style>
+
+    </head>
+
+    <body onload="initialize()">
+
+        <div id="infodiv" style="font-family: Tahoma; text-align: center; 
+             display: block; margin: auto; width: 600px; height: 28px; 
+             border: cadetblue ridge; border-radius: 10px;
+             background-color:#dbf6dd">
+
+            خريطة مواقع نقاط التفتيش في البحرين - اضعط على 
+            <img style="vertical-align: middle;" src="CheckPoint.png" />
+            لرؤية التغريدة المتصلة
+
+        </div>
+
+        <div id="the_map" style="display: block; margin: auto; width: 600px; height: 600px;">Loading map here</div>
+
+
+    </body>
+</html>
