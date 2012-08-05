@@ -13,7 +13,7 @@ function initialize() {
     
     //map options 
     var mapOptions = {
-        zoom: 11,
+        zoom: 10,
         center: Bahrain,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
