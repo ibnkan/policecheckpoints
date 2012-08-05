@@ -25,7 +25,7 @@ function initialize() {
     var useragent = navigator.userAgent;
 
     if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
-        map.setZoom(9);
+        map.setZoom(10);
     }
     
     /*overlay infobox image on map
