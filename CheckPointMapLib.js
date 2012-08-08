@@ -22,6 +22,7 @@ function initialize() {
     //create map
     map = new google.maps.Map(document.getElementById("the_map"), mapOptions);
     
+       
     //set zoom to 10 if on mobile
     var useragent = navigator.userAgent;
 
@@ -74,37 +75,37 @@ function hideInfo() {
 //////////////////////////////////////////////////////////////////////
 
 function formatTime(str){
-    //get hours regex ie 2 digits not follwed by space(day) or end of the line(minutes)
-    var hours = parseInt(str.match(/\d{2}(?!$|\s)/), 10);
-    //add 3 hours for Bahrain timezone
-    hours += 3;
-    //correction for base 24h
-    if(hours >=24){
-        hours -=24;
-    }
     
-    var ampm;
-    if (hours >= 12) {
-        ampm = " PM</strong>";
-        if (hours > 12) {
-            hours -= 12;
+    var d = new Date(str);
+    //variable for AM/PM string
+    var tt;
+
+    if (d.getHours() >= 12) {
+        tt = " PM</strong>";
+        if (d.getHours() > 12) {
+            d.setHours(d.getHours() - 12);
         }
     }
     else {
-        ampm = " AM</strong>";
-        if (hours == 0) {
-            hours = 12;
+        tt = " AM</strong>";
+        if (d.getHours() == 0) {
+            d.setHours(12);
         }
     }
-    //put time in bold <stonrg> tag and underline
-    return str.replace(/\d{2}(?!$|\s)/,'@ <strong style="text-decoration:underline;">' + hours) + ampm;
+
+    //show local time in h:mm tt bold and underline, the (?:) if statement adds preceding zero for min [0-9]
+    str = '<strong style="text-decoration:underline;">'+d.getHours() + ':' + (d.getMinutes()<10?'0':'') + d.getMinutes() + tt;
+    //then date in ddd, dd mmm in a new line
+    str += '<br />' + d.toLocaleString().substr(0, 3) + ', ' + d.toLocaleString().substr(8, 2)+ ' ' + d.toLocaleString().substr(4, 3);
+    
+    return str;
     
 }
 //////////////////////////////////////////////////////////////////////
 var y = 1;
 function randomDecimal() {
     y *= -1;
-    var x = y * (Math.random() * 0.0005);
+    var x = y * (Math.random() * 0.00075);
     return x;
     
 }
@@ -119,6 +120,8 @@ function findlocation(tweettext) {
 
             if (point == tweettext.match(point)) {
                 latlng = extractLatLng(mappoints[point]);
+                //add the location name to latlng array
+                latlng.push(point)
                 break;
             }
         }
@@ -153,7 +156,12 @@ function extractLatLng(text) {
 
 function PrintTweet(tweet) {
 
-    var htmltext = '<div style="background-color:GhostWhite"><img src="' + tweet[0] + '\" style="float:left; margin-bottom:20px; margin-right:10px;" /img><strong>' + tweet[1] + '</strong><br /><em style="font-size:75%;">' + tweet[2].replace(/(@|#)\w+/g, "") + '</em><br /><span style="font-size:55%;">' + tweet[3] + '</span></div>';
+    var htmltext = '<div style="font-family: Tahoma;"><img src="' + tweet[0] + '\" style="height:28px; vertical-align: middle; border: lightgrey solid; border-width:1px; border-radius:4px;" /img>\n\
+<a href="https://twitter.com/' + tweet[1] + '\" title="User Profile"><strong> @' + tweet[1] + '</strong></a></div>\n\
+<div style="font-family: Tahoma; clear:both; background-color:GhostWhite; padding: 5px; margin-top: 2px; margin-bottom: 0; border-radius:8px;">\n\
+<div style="font-size:75%; direction:rtl; text-align: right;">' + tweet[2].replace(/(@|#)\w+/g, "") + '</div>\n\
+<div style="font-size:60%; direction:ltr; text-align: left; margin-top:3px;">' + tweet[3] + '</div>\n\
+</div>';
 
     //document.getElementById("txt").innerHTML += htmltext;
 
@@ -165,25 +173,22 @@ function PrintTweet(tweet) {
 
 function ProcessTweets(evt) {
 
-    //show number of tweets found
-    //document.getElementById("txt").innerHTML += "Total tweets found -->> " + response.results.length;
-
     for (i = 0; i < response.results.length; i++) {
 
         //create <a> tags for all links in a tweet using regexp $& = ($1,$2,$3...etc)
         var tweet = response.results[i].text.replace(/(\b(http|https):\/\/\S+)/g, '<a href="$&">$&</a>');
         //var tweeturl = extractURL(tweet);
         //Add an @ sign to the profile name as done on twitter
-        var profilename = '@' + response.results[i].from_user;
+        var profilename = response.results[i].from_user;
         var profileimage = response.results[i].profile_image_url;
-        //remove seconds,year and timezone from created_at string using regexp then convert time to 12h format
-        var timestamp = formatTime(response.results[i].created_at.replace(/(:\d+\s\+\d+|\d{4})/gi,""));
+        //format time stamp to show as Day, dd mmm @ h:mm TT
+        var timestamp = formatTime(response.results[i].created_at);
 
         twitterdata[i] = [profileimage, profilename, tweet, timestamp];
 
     }
 
-    //$(document).trigger('ProcessLinks');
+    //$(document).trigger('ProcessLinks'); //expand links and find sent google maps coordinates to create exact markers
     $(document).trigger('ShowResults');
 }
 
@@ -239,15 +244,17 @@ function ShowResults() {
             latlng[1] = parseFloat(latlng[1])+randomDecimal();
             
 
-            //create the marker
+            //create the markers
             mapmarkers[i] = new google.maps.Marker({
                 position: new google.maps.LatLng(latlng[0], latlng[1]),
                 map: map,
                 Icon: markerIcon,
-                title: 'Marker ' + (i + 1),
+                title: latlng[2]+ ' ' + (i + 1), //location name
                 html: html,
                 draggable: false
             });
+            
+            
 
             //show infoWindow when marker is clicked
             google.maps.event.addListener(mapmarkers[i], 'click', function() {
