@@ -159,7 +159,7 @@ function PrintTweet(tweet) {
     var htmltext = '<div style="font-family: Tahoma;"><img src="' + tweet[0] + '\" style="height:28px; vertical-align: middle; border: lightgrey solid; border-width:1px; border-radius:4px;" /img>\n\
 <a href="https://twitter.com/' + tweet[1] + '\" title="User Profile"><strong> @' + tweet[1] + '</strong></a></div>\n\
 <div style="font-family: Tahoma; clear:both; background-color:GhostWhite; padding: 5px; margin-top: 2px; margin-bottom: 0; border-radius:8px;">\n\
-<div style="font-size:75%; direction:rtl; text-align: right;">' + tweet[2].replace(/(@|#)\w+/g, "") + '</div>\n\
+<div style="font-size:75%; direction:rtl; text-align: right;">' + tweet[2].replace(/(@|#)\w+:*/g, "").replace(/["“”]/g,"").replace(/^:/g,"") + '</div>\n\
 <div style="font-size:60%; direction:ltr; text-align: left; margin-top:3px;">' + tweet[3] + '</div>\n\
 </div>';
 
