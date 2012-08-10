@@ -76,36 +76,16 @@ function hideInfo() {
 }
 //////////////////////////////////////////////////////////////////////
 
-function formatTime(str,i){
+function formatTime(str, j){
     
     var d = new Date(str);
-    //variable for AM/PM string
-    var tt;
-
-    if (d.getHours() >= 12) {
-        tt = " PM</strong>";
-        if (d.getHours() > 12) {
-            d.setHours(d.getHours() - 12);
-        }
-    }
-    else {
-        tt = " AM</strong>";
-        if (d.getHours() == 0) {
-            d.setHours(12);
-        }
-    }
-
-    //show local time in h:mm tt bold and underline, the (?:) if statement adds preceding zero for min [0-9]
     var timestamp = [];
-    timestamp [0] = '<strong>'+d.getHours() + ':' + (d.getMinutes()<10?'0':'') + d.getMinutes() + tt;
-    //then date in ddd, dd mmm in a new line
-    timestamp [0] += '<br />' + d.toLocaleString().substr(0, 3) + ', ' + d.toLocaleString().substr(8, 2)+ ' ' + d.toLocaleString().substr(4, 3);
     
     //this is to show relative time passed since posting
     var now = new Date();
 
     //time length in miuntes
-    timelength = (now - d)/60000;
+    var timelength = (now - d)/60000;
 
 
     //using && and || stringing trick, check http://is.gd/rUrMHq
@@ -125,9 +105,30 @@ function formatTime(str,i){
     //determine if it's the latest tweet
     if(timelength < latest[0]){
         latest[0] = timelength;
-        latest[1] = i;
+        latest[1] = j;
+    }
+    
+    //variable for AM/PM string
+    var tt;
+
+    if (d.getHours() >= 12) {
+        tt = " PM</strong>";
+        if (d.getHours() > 12) {
+            d.setHours(d.getHours() - 12);
+        }
+    }
+    else {
+        tt = " AM</strong>";
+        if (d.getHours() == 0) {
+            d.setHours(12);
+        }
     }
 
+    //show local time in h:mm tt bold and underline, the (?:) if statement adds preceding zero for min [0-9]
+    timestamp [0] = '<strong>'+d.getHours() + ':' + (d.getMinutes()<10?'0':'') + d.getMinutes() + tt;
+    //then date in ddd, dd mmm in a new line
+    timestamp [0] += '<br />' + d.toLocaleString().substr(0, 3) + ', ' + d.toLocaleString().substr(8, 2)+ ' ' + d.toLocaleString().substr(4, 3);
+    
     return timestamp;
     
 }
@@ -190,11 +191,9 @@ function PrintTweet(tweet) {
 <a href="https://twitter.com/' + tweet[1] + '\" title="User Profile"><strong> @' + tweet[1] + '</strong></a></div>\n\
 <div style="font-family: Tahoma; clear:both; background-color:GhostWhite; padding: 5px; margin-top: 2px; margin-bottom: 0; border-radius:8px;">\n\
 <div style="font-size:75%; direction:rtl; text-align: right;">' + tweet[2].replace(/(@|#)\w+:*/g, "").replace(/["“”]/g,"").replace(/^:/g,"") + '</div>\n\
-<div style="font-size:60%; direction:ltr; text-align: left; margin-top:5px; float:left;">' + tweet[3][0] + '</div>\n\
-<div style="font-size:60%; direction:rtl; text-align: right; margin-top:5px; float:right;"><br />' + tweet[3][1] + '</div>\n\
+<div style="font-size:60%; direction:ltr; text-align: left; margin:5px 0px; float:left;">' + tweet[3][0] + '</div>\n\
+<div style="font-size:60%; direction:rtl; text-align: right; margin:5px 0px; float:right;"><br />' + tweet[3][1] + '</div>\n\
 </div>';
-
-    //document.getElementById("txt").innerHTML += htmltext;
 
     return htmltext;
 
@@ -213,7 +212,7 @@ function ProcessTweets(evt) {
         var profilename = response.results[i].from_user;
         var profileimage = response.results[i].profile_image_url;
         //format time stamp to show as Day, dd mmm @ h:mm TT
-        var timestamp = formatTime(response.results[i].created_at,i);
+        var timestamp = formatTime(response.results[i].created_at, i);
 
         twitterdata[i] = [profileimage, profilename, tweet, timestamp];
 
