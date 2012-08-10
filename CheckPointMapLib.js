@@ -94,11 +94,33 @@ function formatTime(str){
     }
 
     //show local time in h:mm tt bold and underline, the (?:) if statement adds preceding zero for min [0-9]
-    str = '<strong style="text-decoration:underline;">'+d.getHours() + ':' + (d.getMinutes()<10?'0':'') + d.getMinutes() + tt;
+    var timestamp = [];
+    timestamp [0] = '<strong>'+d.getHours() + ':' + (d.getMinutes()<10?'0':'') + d.getMinutes() + tt;
     //then date in ddd, dd mmm in a new line
-    str += '<br />' + d.toLocaleString().substr(0, 3) + ', ' + d.toLocaleString().substr(8, 2)+ ' ' + d.toLocaleString().substr(4, 3);
+    timestamp [0] += '<br />' + d.toLocaleString().substr(0, 3) + ', ' + d.toLocaleString().substr(8, 2)+ ' ' + d.toLocaleString().substr(4, 3);
     
-    return str;
+    //this is to show relative time passed since posting
+    var now = new Date();
+
+    //time length in miuntes
+    timelength = (now - d)/60000;
+
+
+    //using && and || stringing trick, check http://is.gd/rUrMHq
+    timestamp [1] = 
+    timelength < 1      && "قبل لحظات" ||
+    timelength < 2      && "قبل دقيقة" ||
+    timelength < 11     && "قبل " + Math.floor(timelength) + " دقائق" ||
+    timelength < 60     && "قبل " + Math.floor(timelength) + " دقيقة" ||
+    timelength < 90     && "قبل ساعة" ||
+    timelength < 120    && "قبل ساعة و نصف" ||
+    timelength < 180    && "قبل ساعتان" ||
+    timelength < 660    && "قبل " + Math.floor(timelength/60) + " ساعات" ||
+    timelength < 1440   && "قبل " + Math.floor(timelength/60) + " ساعة" ||
+    (now.getDate()-d.getDate()) == 1   && "بالأمس" ||
+    (now.getDate()-d.getDate()) > 1    && "";
+
+    return timestamp;
     
 }
 //////////////////////////////////////////////////////////////////////
@@ -160,7 +182,8 @@ function PrintTweet(tweet) {
 <a href="https://twitter.com/' + tweet[1] + '\" title="User Profile"><strong> @' + tweet[1] + '</strong></a></div>\n\
 <div style="font-family: Tahoma; clear:both; background-color:GhostWhite; padding: 5px; margin-top: 2px; margin-bottom: 0; border-radius:8px;">\n\
 <div style="font-size:75%; direction:rtl; text-align: right;">' + tweet[2].replace(/(@|#)\w+:*/g, "").replace(/["“”]/g,"").replace(/^:/g,"") + '</div>\n\
-<div style="font-size:60%; direction:ltr; text-align: left; margin-top:3px;">' + tweet[3] + '</div>\n\
+<div style="font-size:60%; direction:ltr; text-align: left; margin-top:5px; float:left;">' + tweet[3][0] + '</div>\n\
+<div style="font-size:60%; direction:rtl; text-align: right; margin-top:5px; float:right;"><br />' + tweet[3][1] + '</div>\n\
 </div>';
 
     //document.getElementById("txt").innerHTML += htmltext;
