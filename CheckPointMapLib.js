@@ -255,7 +255,7 @@ function LongUrlReceived(evt, longurl) {
 
 function OpenInfoWindow(){
     infoWindow.setContent(mapmarkers[mapmarkers.length - 1].html);
-    infoWindow.open(map, mapmarkers[1]);
+    infoWindow.open(map, mapmarkers[mapmarkers.length - 1]);
     //setTimeout(infoWindow.close(),2500);
 }
 
