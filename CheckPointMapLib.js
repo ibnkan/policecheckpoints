@@ -262,7 +262,8 @@ function LongUrlReceived(evt, longurl) {
 function OpenInfoWindow(){
     infoWindow.setContent(mapmarkers[latest[1]].html);
     infoWindow.open(map, mapmarkers[latest[1]]);
-//setTimeout(infoWindow.close(),2500);
+    setTimeout('infoWindow.close()',7500);
+    setTimeout('$("#infodiv").hide()',8500);
 }
 
 function ShowResults() {
