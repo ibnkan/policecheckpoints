@@ -127,7 +127,6 @@ function formatTime(str,i){
         latest[0] = timelength;
         latest[1] = i;
     }
-    console.log(timelength,latest);
 
     return timestamp;
     
