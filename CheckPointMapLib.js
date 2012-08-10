@@ -3,6 +3,7 @@ var map;
 var Bahrain = new google.maps.LatLng(26.125, 50.55);
 var markerIcon = "CheckPoint.png";
 var mapmarkers = [];
+var latest = [144000,99];
 
 
 //create an infoWindow object to be used by markers on the map
@@ -75,7 +76,7 @@ function hideInfo() {
 }
 //////////////////////////////////////////////////////////////////////
 
-function formatTime(str){
+function formatTime(str,i){
     
     var d = new Date(str);
     //variable for AM/PM string
@@ -120,6 +121,13 @@ function formatTime(str){
     timelength < 1440   && "قبل " + Math.floor(timelength/60) + " ساعة" ||
     (now.getDate()-d.getDate()) == 1   && "بالأمس" ||
     (now.getDate()-d.getDate()) > 1    && "";
+
+    //determine if it's the latest tweet
+    if(timelength < latest[0]){
+        latest[0] = timelength;
+        latest[1] = i;
+    }
+    console.log(timelength,latest);
 
     return timestamp;
     
@@ -206,7 +214,7 @@ function ProcessTweets(evt) {
         var profilename = response.results[i].from_user;
         var profileimage = response.results[i].profile_image_url;
         //format time stamp to show as Day, dd mmm @ h:mm TT
-        var timestamp = formatTime(response.results[i].created_at);
+        var timestamp = formatTime(response.results[i].created_at,i);
 
         twitterdata[i] = [profileimage, profilename, tweet, timestamp];
 
@@ -254,9 +262,9 @@ function LongUrlReceived(evt, longurl) {
 //////////////////////////////////////////////////////////////////////
 
 function OpenInfoWindow(){
-    infoWindow.setContent(mapmarkers[mapmarkers.length - 1].html);
-    infoWindow.open(map, mapmarkers[mapmarkers.length - 1]);
-    //setTimeout(infoWindow.close(),2500);
+    infoWindow.setContent(mapmarkers[latest[1]].html);
+    infoWindow.open(map, mapmarkers[latest[1]]);
+//setTimeout(infoWindow.close(),2500);
 }
 
 function ShowResults() {
