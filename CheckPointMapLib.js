@@ -50,6 +50,7 @@ function initialize() {
         $(document).bind('ProcessLinks', ProcessLinks);
         $(document).bind('LongUrlReceived', LongUrlReceived);
         $(document).bind('ShowResults', ShowResults);
+        $(document).bind('OpenInfoWindow', OpenInfoWindow);
         
         $.getJSON("http://search.twitter.com/search.json?q=%23Bahrain%20%22%D9%86%D9%82%D8%B7%D8%A9%20%D8%AA%D9%81%D8%AA%D9%8A%D8%B4%22%20-filter%3Aretweets&rpp=100&result_type=recent&callback=?", function(data) {
 
@@ -252,6 +253,12 @@ function LongUrlReceived(evt, longurl) {
 
 //////////////////////////////////////////////////////////////////////
 
+function OpenInfoWindow(){
+    infoWindow.setContent(mapmarkers[mapmarkers.length - 1].html);
+    infoWindow.open(map, mapmarkers[1]);
+    //setTimeout(infoWindow.close(),2500);
+}
+
 function ShowResults() {
 
     for (i = 0; i < twitterdata.length; i++) {
@@ -289,6 +296,7 @@ function ShowResults() {
         }
 
     }
+    $(document).trigger('OpenInfoWindow');
 
 }
 //////////////////////////////////////////////////////////////////////
